@@ -1,0 +1,46 @@
+plugins {
+    // Apply the groovy plugin to also add support for Groovy (needed for Spock)
+    id 'groovy'
+
+    // Apply the java-library plugin for API and implementation separation.
+    id 'java-library'
+}
+
+version = '1.0.0'
+
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
+    }
+}
+
+java {
+    withSourcesJar()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:31.0.1-jre'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+
+    testImplementation 'org.apache.groovy:groovy:4.0.18'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+}
+
+testing {
+    suites {
+        // Configure the built-in test suite
+        test {
+            // Use Spock test framework
+            useSpock('2.3-groovy-4.0')
+        }
+    }
+}
